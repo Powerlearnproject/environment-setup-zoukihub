@@ -1,0 +1,89 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Q1
+      id: q1
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Q1
+        setup-command: ''
+        command: What is the first step for installing Dart on a Windows machine?
+        input: |-
+          A) Install Homebrew
+          B) Download the Dart SDK
+          C) Update your PATH
+          D) Run Dart Doctor
+        expected-output: B) Download the Dart SDK
+        comparison-method: exact
+        timeout: 10
+        max-score: 5
+    - name: Q2
+      id: q2
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Q2
+        setup-command: ''
+        command: Which command verifies the Dart installation on macOS?
+        input: |-
+          A) dart --install
+          B) dart --check
+          C) dart --verify
+          D) dart --version
+        expected-output: D) dart --version
+        comparison-method: exact
+        timeout: 10
+        max-score: 5
+    - name: Q3
+      id: q3
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Q3
+        setup-command: ''
+        command: After downloading and extracting the Flutter SDK on Linux, what is
+          the next step?
+        input: |-
+          A) Install Homebrew
+          B) Update your PATH
+          C) Run Flutter Doctor
+          D) Create a new Flutter project
+        expected-output: B) Update your PATH
+        comparison-method: exact
+        timeout: 10
+        max-score: 5
+    - name: Q4
+      id: q4
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Q4
+        setup-command: ''
+        command: What command is used to run a newly created Flutter app?
+        input: |-
+          A) flutter start
+          B) flutter build
+          C) flutter run
+          D) flutter init
+        expected-output: C) flutter run
+        comparison-method: exact
+        timeout: 10
+        max-score: 5
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        Q1_RESULTS: "${{steps.q1.outputs.result}}"
+        Q2_RESULTS: "${{steps.q2.outputs.result}}"
+        Q3_RESULTS: "${{steps.q3.outputs.result}}"
+        Q4_RESULTS: "${{steps.q4.outputs.result}}"
+      with:
+        runners: q1,q2,q3,q4
